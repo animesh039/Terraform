@@ -197,3 +197,11 @@ resource "azurerm_resource_group" "rg-nw" {
   location = "westeurope"
 }
 ```
+
+* The beauty of local variable is we can refer another local variable inside one local variable.
+``` hcl
+locals {
+  naming_convention = "${var.environment}-${var.location_short}"
+  sample = "test-local-variable-${local.naming_convention}"
+}
+```
