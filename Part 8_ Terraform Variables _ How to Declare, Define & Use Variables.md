@@ -26,7 +26,7 @@ variable "vm_license_type" {
 >
 > If we are explicitly defining the type and not sure about the type of value it can take, then we can mention as any and terraform will assume the type by itself.
 
-`` hcl
+``` hcl
 variable "tags" {
   description = "A mapping of tags to be assigned to the resource."
   type = map(any)
