@@ -166,3 +166,33 @@ resource "azurerm_resource_group" "rg-nw" {
 ```
 
 ### Local Variable:
+* Local variable is different from normal variable. We don't have to declare the variable.
+* With the help of local variable, we can directly assign the value of the variable.
+
+``` hcl
+resource "azurerm_resource_group" "rg-nw" {
+  name = "rg-${var.environment}-${var.nw_resource_group_name}"   # --> String interpolation
+  location = "westeurope"
+}
+```
+* In this example, we can see that rg-${var.environment} is common so we are repeating it again and again. So, to make it another variable we can't define it in terraform.tfvars as we can't define a variable by referring another variable in tfvars file.
+``` hcl
+resource_group_prefix = "rg-${var.environment}"
+```
+> **NOTE:** This is not correct syntax for variable assignment.
+>
+> For this case we have to use local variable. These variables are used for interpolation of different variable values and it is defined in the terraform config file itself.
+
+* Create a **locals.tf** file:
+``` hcl
+locals {
+  resource_group_prefix = "rg-${var.environment}"
+}
+```
+* Now, create a **main.tf** file:
+``` hcl
+resource "azurerm_resource_group" "rg-nw" {
+  name = "${local.resource_group_prefix}-${var.nw_resource_group_name}"
+  location = "westeurope"
+}
+```
