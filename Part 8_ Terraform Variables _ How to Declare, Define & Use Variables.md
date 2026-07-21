@@ -70,14 +70,17 @@ variable "vm_admin_username" {
 ```
 
 ### Variable Definition:
- 1. default:
+ 1. **default:**
+``` hcl
 variable "location" {
   description = "The Azure Region where the Resource should be created."
   default = "westeurope"
   type = string
 }
+```
 
- 2. -var: We can use -var to define the value of variable while running terraform commands.
+ 2. **-var:** We can use -var to define the value of variable while running terraform commands.
+``` hcl
 variable "location" {
   description = "The Azure Region where the Resource should be created."
   type = string
@@ -86,65 +89,80 @@ variable "sku" {
   description = "SKU type for Azure app service."
   type = string
 }
+```
+``` bash
+terraform plan -var=location="westeurope" -var=sku="S1"
+```
 
-# terraform plan -var=location="westeurope" -var=sku="S1"
+> **NOTE:** If we want to take the value from some script then we can use -var but it is not a good option to use within the terraform as we have to mention -var multiple times while writing the command, instead we can use .tfvars file.
 
-# NOTE: If we want to take the value from some script then we can use -var but it is not a good option to use within the terraform
-# as we have to mention -var multiple times while writing the command, instead we can use .tfvars file.
-
-# 3. .tfvars file: default variable definition file for terraform.
+ 3. **.tfvars file:** default variable definition file for terraform.
+``` hcl
 location = "westeurope"
+```
 
-# NOTE: We can have different .tfvars file for test and prod environments and can use the same variable. But at the time of running
-# terraform commands we have to supply the terraform file as
-# terraform plan -var-file='prod.tfvars' --> In powershell environments
-# terraform plan -var-file="prod.tfvars" --> In Linux terminal environments
+> **NOTE:** We can have different .tfvars file for test and prod environments and can use the same variable. But at the time of running terraform commands we have to supply the terraform file as:
 
-# NOTE: If the name is terraform.tfvars then we don't have to mentionn with -var-file. If the file name is other than this then we have to
-# explicitly mention it while running terraform commands.
+``` bash
+terraform plan -var-file='prod.tfvars' --> In powershell environments
+terraform plan -var-file="prod.tfvars" --> In Linux terminal environments
+```
 
-# 4. Environment Variable: We can define environmet variable and consume it. But how does terraform know which environment variable to take
-# as the variable value. For this terraform follows a particular naming convention. It should start with "TF_VAR_" as a prefix to the variable.
-# $env:TF_VAR_location="westeurope"  --> In powershell
-# set TF_VAR_location="westeurope"   --> In Command Prompt
-# export TF_VAR_location="westeurope" --> In Linux
+> **NOTE:** If the name is terraform.tfvars then we don't have to mentionn with -var-file. If the file name is other than this then we have to explicitly mention it while running terraform commands.
 
-# 5. At Runtime:
-# terraform plan -var=location="westeurope" -var=sku="S1"
+ 4. **Environment Variable:** We can define environmet variable and consume it. But how does terraform know which environment variable to take as the variable value. For this terraform follows a particular naming convention. It should start with "TF_VAR_" as a prefix to the variable.
+``` bash
+$env:TF_VAR_location="westeurope"  --> In powershell
+set TF_VAR_location="westeurope"   --> In Command Prompt
+export TF_VAR_location="westeurope" --> In Linux
+```
+
+ 5. **At Runtime:**
+``` bash
+terraform plan -var=location="westeurope" -var=sku="S1"
+```
 
 
-
-### Variable Definition Precedence: Highest precedence at the top and lowest at the bottom.
-# 1. -var or -var-file
-# 2. *.auto.tfvars or *.auto.tfvars.json
-# 3. terraform.tfvars.json
-# 4. terraform.tfvars
-# 5. environment variable
-# 6. default
+### Variable Definition Precedence: 
+* Highest precedence at the top and lowest at the bottom.
+  1. -var or -var-file
+  2. *.auto.tfvars or *.auto.tfvars.json
+  3. terraform.tfvars.json
+  4. terraform.tfvars
+  5. environment variable
+  6. default
 
 
 
 ### Variable Usage:
-# vi terraform.tfars
-location="westeurope"
 
-# vi main.tf
+* Create **terraform.tfars** file:
+``` hcl
+location="westeurope"
+```
+
+* Create **main.tf** file:
+``` hcl
 resource "azurerm_resource_group" "rg-nw" {
   name = "rg-network"
   location = var.location
 }
+```
 
 ### Variable Usage - Interpolation:
-# It is used when we want to append a variable with some prefix or suffix or add two values.
-# vi terraform.tfvars
+* It is used when we want to append a variable with some prefix or suffix or add two values.
+* Create **terraform.tfars** file:
+``` hcl
 nw_resource_group_name = "network"
 environment = "test"
+```
 
-# vi main.tf
+* Create **main.tf** file:
+``` hcl
 resource "azurerm_resource_group" "rg-nw" {
   name = "rg-${var.environment}-${var.nw_resource_group_name}"   # --> String interpolation
   location = "westeurope"
 }
-
+```
 
 ### Local Variable:
