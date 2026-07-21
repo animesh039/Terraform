@@ -168,6 +168,7 @@ resource "azurerm_resource_group" "rg-nw" {
 ### Local Variable:
 * Local variable is different from normal variable. We don't have to declare the variable.
 * With the help of local variable, we can directly assign the value of the variable.
+* These variables are useful when we have a use case where we want to combine two variables.
 
 ``` hcl
 resource "azurerm_resource_group" "rg-nw" {
