@@ -84,7 +84,7 @@ terraform {
     key = "prod.tfstate"
   }
 }
-```
-
-    * **Service Principal via Client Certificate:**
+```  
+* **Service Principal via Client Certificate:**
+* 
 2. 
