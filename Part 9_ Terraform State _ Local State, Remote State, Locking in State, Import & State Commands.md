@@ -73,8 +73,8 @@ terraform init -backend-config="prod.backend"
 ### Remote Backend Authentication Type for Azure.
 ##### Authentication Types:
 1. **Access Key:** With access key also we have multiple ways to configure the authentication.
-    * **User Principal via Azure CLI:** This is the default authentication mechanism which we were using till now. If we don't mention any authentication mechanism, then it will be used. So, whatever account we have logged in from the Azure CLI will be taken into consideration and from that account the storage account will try to authenticate. If permission is not there then account will not be accessible. For this to work make sure "Allow Storage Key Access" is Enabled from the Azure portal in the Storage account configuration.
-    * **Service Principal via Client Secret:** This is not the default authentication mechanism, so we have to make some changes in the backend block to use this authentication method. This is mostly used in Pipeline.
+* **User Principal via Azure CLI:** This is the default authentication mechanism which we were using till now. If we don't mention any authentication mechanism, then it will be used. So, whatever account we have logged in from the Azure CLI will be taken into consideration and from that account the storage account will try to authenticate. If permission is not there then account will not be accessible. For this to work make sure "Allow Storage Key Access" is Enabled from the Azure portal in the Storage account configuration.
+* **Service Principal via Client Secret:** This is not the default authentication mechanism, so we have to make some changes in the backend block to use this authentication method. This is mostly used in Pipeline.
 ``` hcl
 terraform {
   backend "azurerm" {
@@ -86,5 +86,7 @@ terraform {
 }
 ```  
 * **Service Principal via Client Certificate:**
-* 
-2. 
+* **Access Key Direct:**
+
+2. **Azure Active Directory:**
+3. **SAS Token:**
