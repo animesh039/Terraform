@@ -68,3 +68,5 @@ After that Run:
 terraform init -backend-config="prod.backend"
 ```
 
+> **NOTE:** There can be a scenario where we want to create our resources in Azure and keep our state file in AWS OR we want to create our resources on Azure in different subscription and create our resources in different subscription. For this terraform has to be authenticated with the remote backend.
+
