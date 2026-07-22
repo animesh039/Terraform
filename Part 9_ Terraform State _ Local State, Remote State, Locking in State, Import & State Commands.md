@@ -70,3 +70,20 @@ terraform init -backend-config="prod.backend"
 
 > **NOTE:** There can be a scenario where we want to create our resources in Azure and keep our state file in AWS OR we want to create our resources on Azure in different subscription and create our resources in different subscription. For this terraform has to be authenticated with the remote backend.
 
+### Remote Backend Authentication Type for Azure.
+##### Authentication Types:
+1. **Access Key:** With access key also we have multiple ways to configure the authentication.
+    * **User Principal via Azure CLI:** This is the default authentication mechanism which we were using till now. If we don't mention any authentication mechanism, then it will be used. So, whatever account we have logged in from the Azure CLI will be taken into consideration and from that account the storage account will try to authenticate. If permission is not there then account will not be accessible. For this to work make sure "Allow Storage Key Access" is Enabled from the Azure portal in the Storage account configuration.
+    * **Service Principal via Client Secret:** This is not the default authentication mechanism, so we have to make some changes in the backend block to use this authentication method. This is mostly used in Pipeline.
+``` hcl
+terraform {
+  backend "azurerm" {
+    resource_group_name = "tfstate-rg"
+    storage_account_name = "terraformstatestgacc01"
+    container_name = "terraform-state"
+    key = "prod.tfstate"
+  }
+}
+```
+    * 
+2. 
