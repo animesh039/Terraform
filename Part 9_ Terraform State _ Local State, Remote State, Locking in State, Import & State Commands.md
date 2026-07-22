@@ -85,5 +85,6 @@ terraform {
   }
 }
 ```
-    * 
+
+    * **Service Principal via Client Certificate:**
 2. 
