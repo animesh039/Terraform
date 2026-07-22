@@ -82,11 +82,30 @@ terraform {
     storage_account_name = "terraformstatestgacc01"
     container_name = "terraform-state"
     key = "prod.tfstate"
+    subscription_id = "0cef8058-xxx-81380e098440"
+    tenant_id = "0hsgdh-xxx-89299373991"
+    client_id = "51ggsk-xxx-7ajjsk89900"
+    client_secret = "DZIJxxxksllsjl.-jkls"
   }
 }
 ```  
-* **Service Principal via Client Certificate:**
-* **Access Key Direct:**
+* **Service Principal via Client Certificate:** Client Secret is sensitive information and it is mentioned in plain text. If we don't want to use Client Secret, then we can use Client certificate path instead.
+``` hcl
+terraform {
+  backend "azurerm" {
+    resource_group_name = "tfstate-rg"
+    storage_account_name = "terraformstatestgacc01"
+    container_name = "terraform-state"
+    key = "prod.tfstate"
+    subscription_id = "0cef8058-xxx-81380e098440"
+    tenant_id = "0hsgdh-xxx-89299373991"
+    client_id = "51ggsk-xxx-7ajjsk89900"
+    client_certificate_path = "C:\\temp\cert.pfx"
+    client_certificate_password = "password123"
+  }
+}
+```
+* **Access Key Direct:** 
 
 2. **Azure Active Directory:**
 3. **SAS Token:**
