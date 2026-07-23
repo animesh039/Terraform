@@ -152,9 +152,30 @@ resource "azurerm_resource_group" "rg1" {
 }
 ```
 * Use Case: Create a database if it is test environment and don't create any database for other environments.
-* **NOTE:** If we want to check if only a particular resource will get created or not, then we can use --target option in terraform command.
+* **NOTE:** If we want to check if only a particular resource will get created or not, then we can use --target option in terraform command. We can check what will be the impact of the changes in code for a particular resource.
 ``` bash
 terraform plan --target=azurerm_mysql_database.nglog_db
 ```
-2. 
+> **NOTE:** If the naming convention of the resource property is getting changed and not like 1,2,3 then we can use for_each loop.
+
+
+2. **for_each:** If multiple properties of a resource is changing then we can use this loop.
+* It can be used in map, where we can have map as a variable. We can assign uniquie values as a key and can have the values assigned to the key. We can iterate on this variable.
+``` hcl
+variable "rgs" {
+  type = map(any)
+  default = {
+    resource_group1="westeurope"
+    resource_group2="eastus"
+    resource_group3="westus"
+  }
+}
+resource "azurerm_resource_group" "rgs" {
+  for_each = var.rgs
+  name = each.key
+  location = each.value
+}
+```
+
+3. 
 
