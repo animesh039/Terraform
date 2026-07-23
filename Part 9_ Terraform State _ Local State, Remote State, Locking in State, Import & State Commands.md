@@ -106,6 +106,44 @@ terraform {
 }
 ```
 * **Access Key Direct:** We know that through the azure storage account we get the access key and with the access key we can do anything in that particular storage account.
+``` hcl
+terraform {
+  backend "azurerm" {
+    resource_group_name = "tfstate-rg"
+    storage_account_name = "terraformstatestgacc01"
+    container_name = "terraform-state"
+    key = "prod.tfstate"
+    subscription_id = "0cef8058-xxx-81380e098440"
+    tenant_id = "0hsgdh-xxx-89299373991"
+     access_key = "0hsgdhjsnh929937shhn"
+  }
+}
+```
+2. **Azure Active Directory:** If we don't want to use the key then we can use Azure AD way to authenticate. Because in some organizations key is not configured.
+``` hcl
+terraform {
+  backend "azurerm" {
+    resource_group_name = "tfstate-rg"
+    storage_account_name = "terraformstatestgacc01"
+    container_name = "terraform-state"
+    key = "prod.tfstate"
+    use_azuread_auth = true
+  }
+}
+```
+* At the same time we have to make sure that "Allow storage account key access" is disabled from the storage account configuration settings.
+  
+3.**SAS Token:** Based on SAS token we can customize the permissions. We can use SAS token as an authentication method for remote backend with limited privileges.
+``` hcl
+terraform {
+  backend "azurerm" {
+    resource_group_name = "tfstate-rg"
+    storage_account_name = "terraformstatestgacc01"
+    container_name = "terraform-state"
+    key = "prod.tfstate"
+    sas_token = "0kkshkkenksnh929937shhn"
+  }
+}
+```
 
-2. **Azure Active Directory:**
-3. **SAS Token:**
+### Locking in State:
