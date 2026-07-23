@@ -287,4 +287,11 @@ output "envs" {
   value = [ for k, v in var.nsgs : v.env if v.env == "prd" ]
 }
 ```
+* If we want to reverse key and values, then:
+``` hcl
+output "nsgs" {
+  value = { for k, v in var.nsgs : v.rg => k... }
+}
+```
+* "k..." this will activate the grouping mode and it will group the similar values.
 
