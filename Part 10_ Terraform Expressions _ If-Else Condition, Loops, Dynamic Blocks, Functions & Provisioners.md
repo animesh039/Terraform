@@ -176,6 +176,31 @@ resource "azurerm_resource_group" "rgs" {
   location = each.value
 }
 ```
-
+* If we have more than two values to iterate through or more that 2 values are different then we can use nested map like:
+``` hcl
+variable "nsgs" {
+  type = map(any)
+  default = {
+    nsg1 = {
+      location = "westeurope"
+      rg = "rg1"
+    }
+    nsg2 = {
+      location = "eastus"
+      rg = "rg2"
+    }
+    nsg3 = {
+      location = "westus"
+      rg = "rg3"
+    }
+  }
+}
+resource "azurerm_network_security_group" "nsgs" {
+  for_each = var.nsgs
+  name = each.key
+  location = each.value["location"]
+  resource_group_name = each.value["rg"]
+}
+```
 3. 
 
