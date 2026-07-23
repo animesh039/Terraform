@@ -117,3 +117,39 @@ locals {
 ```
 
 ### Looping in Terraform:
+##### Types of Loop:
+1. **Count:**
+* Since the iteration is like the list so count will start from 0, we have to add 1 in order to start from 1.
+``` hcl
+resource "azurerm_resource_group" "rgs" {
+  count = 3
+  name = "resource_group_${count.index + 1}"
+  location = "westeurope"
+}
+```
+* If we want to create NSG in resource group1, then:
+``` hcl
+resource "azurerm_resource_group" "rgs" {
+  count = 3
+  name = "resource_group_${count.index + 1}"
+  location = "westeurope"
+}
+resource "azurerm_network_security_group" "nsg1" {
+  name = "nsg1"
+  location = "westeurope"
+  resource_group_name = azurerm_resource_group.rgs[0].name
+}
+```
+* Conditional Expression with Count Loop:
+``` hcl
+variable "i_want_new_rg" {
+  type = bool
+}
+resource "azurerm_resource_group" "rg1" {
+  count = var.i_want_new_rg == true ? 1 : 0
+  name = "resource_group_1"
+  location = "westeurope"
+}
+```
+2. 
+
