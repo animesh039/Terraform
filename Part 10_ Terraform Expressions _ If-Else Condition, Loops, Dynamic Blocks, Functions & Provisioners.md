@@ -217,6 +217,9 @@ resource "azurerm_resource_group" "rgs" {
 
 > **NOTE:** If we are iterating through a list of strings, we have to make sure that the values should be unique and in order to make terraform know that the value is unique, we have to convert the list into set and then we can use it in for_each loop.
 
+> **NOTE:** It's better to define the variable values in terraform.tfvars as it will be easy for the person who don't have knowledge of terraform also, to edit the values in the file. It can be used by anyone in the team, so it is a good practise to keep the variables at one place in terraform.tfvars.
 
-3. 
+3. **for:** It will make the code complex. It is difficult to read as well. But it is useful in some cases where we want to achieve some complex transformation in terraform. For loop is not iterating but it is helping in the transforation of the variable. Example:
+
+
 
