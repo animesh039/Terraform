@@ -105,7 +105,7 @@ terraform {
   }
 }
 ```
-* **Access Key Direct:** 
+* **Access Key Direct:** We know that through the azure storage account we get the access key and with the access key we can do anything in that particular storage account.
 
 2. **Azure Active Directory:**
 3. **SAS Token:**
