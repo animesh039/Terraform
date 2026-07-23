@@ -147,3 +147,25 @@ terraform {
 ```
 
 ### Locking in State:
+* This is an important feature of terraform which helps in avoiding any conflict and ensuring that only one person is using the state file at a time. Whenever terraform command is run, it will acquire state lock and once the command is completed it will release the lock.
+* Suppose user1 ran terraform apply and went somewhere without typing yes, then state is locked. Now, if any other user tries to run terraform commands it will show Error acquiring state lock and it will give details about the lock like lock ID, what operation did the locking, who did it etc.
+* Now, if user2 wants to unlock it, which is not advisable unless it is explicitly required. Example: We are deploying terraform using pipeline and it gets stuck somewhere then the lock will be there. If we try to run the pipeline again we get stuck at the lock. So, we have to unlock it forcefully.
+``` bash
+terraform force-unlock <Lock-ID>
+```
+
+
+### Terraform Import:
+* If there are existing resources in azure cloud and we want to manage those using terraform, then we have to use terraform import which will import the information of the existing resources into the state file.
+* Whatever resources are present in the cloud, we have to write terraform code for the same properties with the same values. Then only we can import and manage it going forward. Also, we have to get the resource ID of that resource.
+* Modify the main.tf file with the resource block:
+``` hcl
+resource "azurerm_resource_group" "rg1" {
+  name = "manual-rg"
+  location = "west europe"
+}
+```
+* Now, run terraform import command:
+``` bash
+terraform import azurerm_resource_group.rg1 <resource-ID>
+```
