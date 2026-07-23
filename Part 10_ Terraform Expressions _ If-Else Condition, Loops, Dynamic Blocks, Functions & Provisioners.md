@@ -220,6 +220,59 @@ resource "azurerm_resource_group" "rgs" {
 > **NOTE:** It's better to define the variable values in terraform.tfvars as it will be easy for the person who don't have knowledge of terraform also, to edit the values in the file. It can be used by anyone in the team, so it is a good practise to keep the variables at one place in terraform.tfvars.
 
 3. **for:** It will make the code complex. It is difficult to read as well. But it is useful in some cases where we want to achieve some complex transformation in terraform. For loop is not iterating but it is helping in the transforation of the variable. Example:
+``` hcl
+variable "nsgs" {
+  type = map(any)
+  default = {
+    nsg1 = {
+      location = "westeurope"
+      rg = "rg1"
+      env = "prd"
+    }
+    nsg2 = {
+      location = "eastus"
+      rg = "rg1"
+      env = "tst"
+    }
+    nsg1 = {
+      location = "westus"
+      rg = "rg1"
+      env = "dev"
+    }
+  }
+}
+```
+* So, I have a requirement thet the env value should be prefixed with a - in the key values. Example: nsg1-prd, nsg2-tst, nsg3-dev. In this case we have to transform the variable using for loop.
+``` hcl
+variable "nsgs" {
+  type = map(any)
+  default = {
+    nsg1 = {
+      location = "westeurope"
+      rg = "rg1"
+      env = "prd"
+    }
+    nsg2 = {
+      location = "eastus"
+      rg = "rg1"
+      env = "tst"
+    }
+    nsg1 = {
+      location = "westus"
+      rg = "rg1"
+      env = "dev"
+    }
+  }
+}
 
+output "nsgs" {
+  value = { for k, v in var.nsgs : "${k}-${v.env}" => v }
+}
+```
+* The output will be a map with the transformed keys and values.
+* This represents Transformed keys: "${k}-${v.env}"
+* There is no transformation in value, so Transformed Value : v
+
+> **NOTE:** If it is not required to use for loop, avoid using it.
 
 
