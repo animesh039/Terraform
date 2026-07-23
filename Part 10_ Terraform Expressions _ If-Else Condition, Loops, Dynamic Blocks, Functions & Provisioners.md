@@ -275,4 +275,16 @@ output "nsgs" {
 
 > **NOTE:** If it is not required to use for loop, avoid using it.
 
+* If we want output in the list format, we can use for loop like below:
+``` hcl
+output "envs" {
+  value = [ for k, v in var.nsgs : v.env ]
+}
+```
+* If we want to pick only the prd environment, then:
+``` hcl
+output "envs" {
+  value = [ for k, v in var.nsgs : v.env if v.env == "prd" ]
+}
+```
 
