@@ -174,9 +174,9 @@ terraform import azurerm_resource_group.rg1 <resource-ID>
 > **NOTE:** We have to make sure that all the configuration should be mentioned, even the configuration which was not done from portal but terraform detects it. During plan phase if it finds any wrong configuration, it will try to recreate the resource. So, we have to add that setting in the configuration file to properly import that resource.
 
 ### State Commands:
-
+* terraform state rm is the opposite command for terraform import, that means if we don't want to manage any resource from terraform anymore then we can use it. We have to remove the code from terraform config file as well.
 ``` bash
 terraform show
-terraform state rm
+terraform state rm azurerm_resource_group.rg1
 terraform state
 ```
