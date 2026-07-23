@@ -152,5 +152,9 @@ resource "azurerm_resource_group" "rg1" {
 }
 ```
 * Use Case: Create a database if it is test environment and don't create any database for other environments.
+* **NOTE:** If we want to check if only a particular resource will get created or not, then we can use --target option in terraform command.
+``` bash
+terraform plan --target=azurerm_mysql_database.nglog_db
+```
 2. 
 
