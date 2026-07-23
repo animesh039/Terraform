@@ -157,7 +157,7 @@ terraform force-unlock <Lock-ID>
 
 ### Terraform Import:
 * If there are existing resources in azure cloud and we want to manage those using terraform, then we have to use terraform import which will import the information of the existing resources into the state file.
-* Whatever resources are present in the cloud, we have to write terraform code for the same properties with the same values. Then only we can import and manage it going forward. Also, we have to get the resource ID of that resource.
+* Whatever resources are present in the cloud, we have to write terraform code for the same properties with the same values. Then only we can import and manage it going forward. Also, we have to get the resource ID of that resource from the properties section.
 * Modify the main.tf file with the resource block:
 ``` hcl
 resource "azurerm_resource_group" "rg1" {
@@ -169,3 +169,6 @@ resource "azurerm_resource_group" "rg1" {
 ``` bash
 terraform import azurerm_resource_group.rg1 <resource-ID>
 ```
+> **NOTE:** We have to write the code of the resource which we want to import as if we are creating the same resource which means we have to write all the arguments which we might have written to create it.
+
+> **NOTE:** We have to make sure that all the configuration should be mentioned, even the configuration which was not done from portal but terraform detects it. During plan phase if it finds any wrong configuration, it will try to recreate the resource. So, we have to add that setting in the configuration file to properly import that resource.
