@@ -151,5 +151,6 @@ resource "azurerm_resource_group" "rg1" {
   location = "westeurope"
 }
 ```
+* Use Case: Create a database if it is test environment and don't create any database for other environments.
 2. 
 
