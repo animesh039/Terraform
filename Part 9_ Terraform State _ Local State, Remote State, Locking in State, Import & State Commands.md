@@ -172,3 +172,11 @@ terraform import azurerm_resource_group.rg1 <resource-ID>
 > **NOTE:** We have to write the code of the resource which we want to import as if we are creating the same resource which means we have to write all the arguments which we might have written to create it.
 
 > **NOTE:** We have to make sure that all the configuration should be mentioned, even the configuration which was not done from portal but terraform detects it. During plan phase if it finds any wrong configuration, it will try to recreate the resource. So, we have to add that setting in the configuration file to properly import that resource.
+
+### State Commands:
+
+``` bash
+terraform show
+terraform state rm
+terraform state
+```
