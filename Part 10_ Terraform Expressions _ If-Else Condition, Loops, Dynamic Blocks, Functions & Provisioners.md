@@ -98,3 +98,18 @@ output "fact_check" {
   value = local.b == local.c ? "Hurrayyy!!" : "Ohh no.. :("
 }
 ```
+* Use case: If we want that Prod should be tagged as sensitive environment and others should be tagged as Medium. It is if-else statement as below:
+
+``` hcl
+locals {
+  tags = {
+    DeploymentDate = timestamp()
+    Environment = var.environment
+    Sensitivity = var.environment == "prd" ? "High" : var.environment == "tst" ? "Medium"
+  }
+}
+```
+> **NOTE:** If we will apply the code on existing environment then it will try to overite the resources. So, to test what will return in the values we can use terraform console to test the output. It will drop us in console prompt and we can test the value which will be returned is fine or not.
+>
+> terraform console
+> local.tags
