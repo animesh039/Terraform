@@ -110,6 +110,10 @@ locals {
 }
 ```
 > **NOTE:** If we will apply the code on existing environment then it will try to overite the resources. So, to test what will return in the values we can use terraform console to test the output. It will drop us in console prompt and we can test the value which will be returned is fine or not.
->
+
+``` bash
 > terraform console
 > local.tags
+```
+
+### Looping in Terraform:
