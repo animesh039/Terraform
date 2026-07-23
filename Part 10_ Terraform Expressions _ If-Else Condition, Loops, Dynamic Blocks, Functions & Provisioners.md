@@ -202,5 +202,21 @@ resource "azurerm_network_security_group" "nsgs" {
   resource_group_name = each.value["rg"]
 }
 ```
+* Count loop helps in changing the name on the basis of numbers and it iterates on the basis of nunmbers. If only one property of a resource changes, then also we can use for_each loop like below. So, if there is only one value which is changing, we can use a list to iterate through instead of a map.
+``` hcl
+variable "rgs" {
+  type = list(any)
+  default = ["rg-prod", "rg-test", "rg-dev"]
+}
+resource "azurerm_resource_group" "rgs" {
+  for_each = toset(var.rgs)
+  name = each.value
+  location = "westeurope"
+}
+```
+
+> **NOTE:** If we are iterating through a list of strings, we have to make sure that the values should be unique and in order to make terraform know that the value is unique, we have to convert the list into set and then we can use it in for_each loop.
+
+
 3. 
 
