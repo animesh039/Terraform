@@ -383,8 +383,8 @@ resource "azurerm_network_security_group" "nsgs" {
     for_each = each.value.allowed_ports
     iterator = port
     content {
-      name = "test123"
-      priority = 100
+      name = "AllowPort-${port.value}"   --> name should also change
+      priority = 200 + index(each.value.allowed_ports, port.value)  --> priority should also change
       direction = "Inbound"
       access = "Allow"
       protocol = "Tcp"
@@ -396,3 +396,16 @@ resource "azurerm_network_security_group" "nsgs" {
   }
 }
 ```
+
+### Provisioner:
+* It is a type of terraform expression which help us to run any script either locally or remotely.
+* We can also decide when to run the script, at the time of creation or destroying.
+* Provisioner is a meta-argument. So, we can extend the resource block with it.
+
+##### Types of Provisioner:
+1. **local-exec:** where we re running the terraform command or where we are running terraform configuration code.
+* Example: We want to generate a log file in our machine where we re running terraform code, when a Vnet is created the log should be generated and the Vnet ID should be stored in the log.
+``` hcl
+
+```
+2. **remote-exec:** It can be executed remotely from the terraform itself from the path configured.
