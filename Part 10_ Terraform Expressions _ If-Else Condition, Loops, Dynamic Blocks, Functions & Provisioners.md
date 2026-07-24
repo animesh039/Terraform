@@ -406,6 +406,19 @@ resource "azurerm_network_security_group" "nsgs" {
 1. **local-exec:** where we re running the terraform command or where we are running terraform configuration code.
 * Example: We want to generate a log file in our machine where we re running terraform code, when a Vnet is created the log should be generated and the Vnet ID should be stored in the log.
 ``` hcl
+resource "azurerm_virtual_network" "vnet" {
+  name = "virtual_network_1"
+  resource_group_name = "resource_group1"
+  location = "westeurope"
+  address_space = ["192.168.0.0/16"]
 
+  provisioner "local-exec" {
+    interpreter = ["PowerShell"]
+    command = "Write-Output 'Vnet ID ${self.id}' >> vnet.log"
+    working_dir = "c:\\temp"            --> where to store the output
+    quiet = false                       --> output will be shown in terraform plan and apply
+    when = create                       --> Run at the time of creation of the resource
+  }
+}
 ```
 2. **remote-exec:** It can be executed remotely from the terraform itself from the path configured.
