@@ -299,4 +299,32 @@ output "nsgs" {
 ### Dynamic Block:
 * It is another type of terraform expression.
 * There are various resources like "azurerm_route_table" which is having a sub-block "route". So, by using dynamic block we can assign values to sub-block dynamically. We can define multiple routes in the same route_table resource. So, we have to apply looping in routes only i.e. sub-block level and not on the block level which is the resource "azurerm_route_table".
+* We have see that we can repeat nested blocks like subnet block in virtual network resource to get multiple subnets in same resource block. We can use dynamic block underneth the resource block to do the iteration of the sub-block.
+* The resource block will be executed once and the nested sub-block will be executed multiple times with the help of dynamic block.
+
+``` hcl
+locals {
+  subnets = {
+    subnet1 = "192.168.0.0/24"
+    subnet1 = "192.168.1.0/24"
+    subnet1 = "192.168.2.0/24"
+  }
+}
+resource "azurerm_virtual_network" "vnet1" {
+  name = "vnet1"
+  resource_group_name = "rg1"
+  location = "westeurope"
+  address_space = ["192.168.0.0/16"]
+
+  dynamic "subnet" {
+    for_each = local.subnets   --> Loop over
+    iterator = item            --> iterator to represent current element (optional)
+    content {
+      name = item.key                --> Nested block content
+      address_prefix = item.value    --> Nested block content
+    }
+  }
+}
+```
+* Dynamic block always works with for_each, it will not work with count.
 * 
