@@ -318,7 +318,7 @@ resource "azurerm_virtual_network" "vnet1" {
 
   dynamic "subnet" {
     for_each = local.subnets   --> Loop over
-    iterator = item            --> iterator to represent current element (optional)
+    iterator = item         --> iterator to represent current element (optional), subnet will be default iterator
     content {
       name = item.key                --> Nested block content
       address_prefix = item.value    --> Nested block content
@@ -327,4 +327,29 @@ resource "azurerm_virtual_network" "vnet1" {
 }
 ```
 * Dynamic block always works with for_each, it will not work with count.
-* 
+* If a nested block or a sub-block is not repeatable then we can't use nested block else it will give error.
+
+* If the nested block is not repeatable and we want to handle the dynamic block based on some user input that the sub-block should be present or not then we can have condition like if the "var.managed_identity_enable" is true the only have the sub-block otherwise don't have the sub-block like below:
+``` hcl
+resource "azurerm_mssql_server" "sqlserver" {
+  name = "sqlserver5474"
+  resource_group_name = "rg1"
+  location = "westeurope"
+  version = "12.0"
+  administrator_login = "sqladmin"
+  administrator_login_password = "thisIsAmj11"
+
+  dynamic "identity" {
+    for_each = var.managed_identity_enable == true ? [1] : []
+    content {
+      type = "SystemAssigned"
+    }
+  }
+}
+
+variable "managed_identity_enable" {
+  type = bool
+  description = "Set to true for creating a managed identity in the Azure SQL Server. Default is false."
+}
+```
+
