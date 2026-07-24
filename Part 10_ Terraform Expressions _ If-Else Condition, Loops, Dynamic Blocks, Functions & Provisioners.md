@@ -295,3 +295,8 @@ output "nsgs" {
 ```
 * "k..." this will activate the grouping mode and it will group the similar values.
 
+
+### Dynamic Block:
+* It is another type of terraform expression.
+* There are various resources like "azurerm_route_table" which is having a sub-block "route". So, by using dynamic block we can assign values to sub-block dynamically. We can define multiple routes in the same route_table resource. So, we have to apply looping in routes only i.e. sub-block level and not on the block level which is the resource "azurerm_route_table".
+* 
