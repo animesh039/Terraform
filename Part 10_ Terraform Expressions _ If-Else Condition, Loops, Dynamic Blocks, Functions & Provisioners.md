@@ -353,3 +353,14 @@ variable "managed_identity_enable" {
 }
 ```
 
+* Real Production Example Use Case: We want to add multiple ports to the security rule of NSG and only iterate through the security_rule sub-block.
+``` hcl
+resource "azurerm_network_security_group" "nsgs" {
+  for_each = var.subnets
+  name = "nsg-$(each.key)-$(var.environment)-$(var.location_short)-01"
+  location = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+
+  
+}
+```
