@@ -354,6 +354,24 @@ variable "managed_identity_enable" {
 ```
 
 * Real Production Example Use Case: We want to add multiple ports to the security rule of NSG and only iterate through the security_rule sub-block.
+  * In the terraform.tfvars file:
+``` hcl
+subnets = {
+  db = {
+    address_prefixes = ["172.18.0.0/28"]
+    allowed_ports = ["1433"]
+  }
+  be = {
+    address_prefixes = ["172.18.0.16/28"]
+    allowed_ports = ["443", "80"]
+  }
+  db = {
+    address_prefixes = ["172.18.0.48/28"]
+    allowed_ports = ["443", "80"]
+  }
+}
+```
+
 ``` hcl
 resource "azurerm_network_security_group" "nsgs" {
   for_each = var.subnets
@@ -361,6 +379,20 @@ resource "azurerm_network_security_group" "nsgs" {
   location = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
-  
+  dynamic "security_rule" {
+    for_each = each.value.allowed_ports
+    iterator = port
+    content {
+      name = "test123"
+      priority = 100
+      direction = "Inbound"
+      access = "Allow"
+      protocol = "Tcp"
+      source_port_range = "*"
+      destination_port_range = port.value
+      source_address_prefix = "*"
+      destination_address_prefix = "*"
+    }
+  }
 }
 ```
