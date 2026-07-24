@@ -4,6 +4,7 @@
 * Child module is called terraform module.
 * One benefit of using module is we can have all the standardization of the module like naming convention to be followed. There will not be any issue while creating the resources as the resources will be created with proper specification which doesn't violate the standard policies defined.
 * We can also store the module in git repository and anyone can use.
+* Think of module as a code to which we give some input, it creates resources and give us some outputs.
 
 ##### Benefits of Modules:
 1. Reusability
@@ -24,5 +25,39 @@
       * providers.tf   --> Provider for Module
       * readme.md      --> Instructions (Optional)
       * variables.tf   --> Module Input Arguments
-* Source code is the module where we write the code, here we define the standardization like naming convention. Source Code is simply the terraform code.
-* 
+* Source code is the module where we write the code, here we define the standardization like naming convention. Source Code is simply the terraform code itself.
+* Whenever we are writing a modeule, we should keep in mind that it should be flexible and reusable.
+* Module Input Arguments:
+   * Fixed Value: It can't be changed at the time of calling the module. Example: nsg in the name of nsg, any fixed deny rule, any fixed route.
+   * Inputs: All variables which we are going to use in the modules. Example: component_name, environment, location.
+   * Required Input: Inputs which are necessary to provide or pass the value as there is no default value supplied to it in terraform.tfvars file. We have to provide the value when we call the module. Example: component_name. There are required input with specific allowed values like location.
+
+
+
+##### Code for Module:
+1. Create a folder called "modules" and inside that create another folder "nsg".
+2. Inside nsg folder create files main.tf, outputs.tf, providers.tf, readme.md, variables.tf and examples folder.
+
+* **main.tf file:**
+``` hcl
+resource "azurerm_network_security_group" "nsg" {
+  name = "nsg-${var.component_name}-${var.environment}-${var.location}-${var.index}"
+  location = var.location
+  resource_group_name = var.resource_group_name
+}
+```
+
+* **variables.tf:**
+``` hcl
+variable "component_name" {
+  type = string
+}
+variable "location" {
+  type = string
+  validation {
+    condition = contains(["centralus", "eastus", "eastus2", "westus"], var.location)
+    error_message = "Location not allowed. Valid values are East, West and Central US."
+  }
+}
+```
+
