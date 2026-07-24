@@ -422,3 +422,58 @@ resource "azurerm_virtual_network" "vnet" {
 }
 ```
 2. **remote-exec:** It can be executed remotely from the terraform itself from the path configured.
+* Example: We can run a script on the newly created VM, but there should be proper network connectivity from where the terraform is run to the remove virtual machine. If we are using pipeline or self-hosted agent then connectivity will be there.
+``` hcl
+resource "azurerm_windows_virtual_machine" "vm1" {
+  name = "vm1"
+  resource_group_name = "resource_group1"
+  location = "westeurope"
+  size = "Standard_D2s_v4"
+  ----------
+  ----------
+  provisioner "remote-exec" {
+    inline = ["echo 'Remote Provisioner Test on VM1' > c:\\remote-exec.txt"]     --> to create the file
+    connection {
+      type = "winrm"
+      user = "adminuser"
+      password = "Password0123"
+      host = self.public_ip_address
+      timeout = "5m"
+      port = 5985
+      use_ntlm = true
+      insecure = true
+    }
+  }
+}
+```
+* In Production we mostly use custom script extension or group policy to run the scripts.
+
+### null_resource:
+* It is a type of resource block. It is by concept interconnected to provisioner.
+* We have seen that to run the provisioner, we have to tie it to a resource block. null_resource is used to run a provisioner script without the need to create a resource. Name itself makes it clear that there will not be any resource but still can use the provisioner.
+* Example: If we have to run some powershell script without deploying the resource. We can use the null_resource and underneath that we can use provisioner.
+``` hcl
+resource "null_resource" "null1" {
+  provisioner "local-exec" {
+    interpreter = ["PowerShell"]
+    command = "Write-Output 'This Resource Triggered at ${timestamp()}' >> terraform.logs"
+    working_dir = "C:\\temp"
+    quiet = true
+  }
+}
+```
+* Null resource will execute only once and will not execute during second execution if we have not mentioned any trigger into it.
+* If there is a scenario that whenever the timestamp is getting changed null resource should run and the logs should get appended. So, we have to trigger this null_resource with every change of the time.
+``` hcl
+resource "null_resource" "null1" {
+  provisioner "local-exec" {
+    interpreter = ["PowerShell"]
+    command = "Write-Output 'This Resource Triggered at ${timestamp()}' >> terraform.logs"
+    working_dir = "C:\\temp"
+    quiet = true
+  }
+  triggers = {
+    always_run = timestamp()
+  }
+}
+```
