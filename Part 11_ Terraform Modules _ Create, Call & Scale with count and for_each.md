@@ -31,6 +31,7 @@
    * Fixed Value: It can't be changed at the time of calling the module. Example: nsg in the name of nsg, any fixed deny rule, any fixed route.
    * Inputs: All variables which we are going to use in the modules. Example: component_name, environment, location.
    * Required Input: Inputs which are necessary to provide or pass the value as there is no default value supplied to it in terraform.tfvars file. We have to provide the value when we call the module. Example: component_name. There are required input with specific allowed values like location.
+   * Optional Input: We can have a default value for this. If someone is not providing any value, it will take the default value.
 
 
 
@@ -59,5 +60,14 @@ variable "location" {
     error_message = "Location not allowed. Valid values are East, West and Central US."
   }
 }
+variable "environment" {
+  type = string
+  default = "dev"
+}
+variable "index" {
+  type = number
+  default = 1
+}
 ```
 
+* ****
