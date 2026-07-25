@@ -269,7 +269,6 @@ variable "subnets" {
 ```
 
 ### Calling a Module:
-##### Main Code/Root Module:
 * We call the child module from the root module.
 * Modeule Sources:
    * Local: "./modules/resource_group"
@@ -278,7 +277,6 @@ variable "subnets" {
    * Git Ssh: "git::ssh://username@example.com/storage.git"
    * GitHub: "github.com/hashicorp/example"
 
-* **main.tf:**
 ``` hcl
 module "rg" {
   source = "./modules/resource_group"
@@ -297,4 +295,99 @@ module "nsg" {
   resource_group_name = module.rg.rg_name
 }
 ```
-* 
+##### Main Code/Root Module:
+* **main.tf:**
+``` hcl
+module "rg" {
+  source = "../modules/resource_group"
+  client = ""
+}
+```
+
+* **variables.tf:**
+``` hcl
+variable "location" {
+  description = "location of the Azure Resources."
+  type = string
+  default = "westeurope"
+
+  validation {
+    condition = contains(["westeurope", "northeurope", "eastus", "westus", "centralus"])
+    error_message = "Valid values are westeurope or eastus."
+  }
+}
+variable "location_short" {
+  description = "Short location of the Azure resources for naming convention."
+  type = string
+  default = weu
+  validation {
+    condition = contains(["weu", "neu", "eus", "wus", "cus"], var.location_short)
+  }
+}
+variable "environment" {
+  description = "Environment name"
+  type = string
+  validation {
+    condition = contains(["tst", "prd", "sbx", "uat", "dev"], var.environment)
+    error_message = "Valid values for environment are tst, prd, sbx, dev or uat."
+  }
+}
+variable "client" {
+  type = string
+}
+variable "tags" {
+  type = map(any)
+  default = {}
+}
+variable "virtual_network_name" {
+  type = string
+}
+variable "resource_group_name" {
+  type = string
+}
+variable "subnets" {
+  type = map(any)
+}
+```
+
+* **terraform.tfvars:**
+``` hcl
+location = "westeurope"
+location_short = "weu"
+
+environment = "tst"
+vnet_address_space = ["172.18.0.0/24"]
+db_subnet = ["172.18.0.0/28"]
+be_subnet = ["172.18.0.16/28"]
+fe_subnet = ["172.18.0.48/28"]
+
+databases = {
+  app = {
+    max_size_gb = 10
+    sku_name = "S0"
+  }
+  nlog = {
+    max_size_gb = 2
+    sku_name = "Basic"
+  }
+}
+
+subnets = {
+  db = {
+    address_prefixes = ["172.18.0.0/28"]
+    allowed_ports = ["1433"]
+  }
+  be = {
+    address_prefixes = ["172.18.0.16/28"]
+    allowed_ports = ["443", "80"]
+  }
+  fe = {
+    address_prefixes = ["172.18.0.48/28"]
+    allowed_ports = ["443", "80"]
+  }
+}
+
+app_services = {
+
+}
+```
