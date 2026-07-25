@@ -69,5 +69,23 @@ variable "index" {
   default = 1
 }
 ```
+* we want to use the nsg ID, so we have to define it in the output.tf.
+* **outputs.tf:**
+``` hcl
+output "nsg_id" {
+  value = azurerm_network_security_group.nsg.id
+}
+```
+* Module can have it's own provider version. So, we want that whenever anyone is calling this module it should have a particular provider version. So, even if the root module has different provider version, this module will use its own provider version. If provider is not defined in child module, it will inherit from root module.
+* **providers.tf:**
+``` hcl
+terraform {
+  required_providers {
+    azurerm = {
+      source = "hashicorp/azurerm"
+      version = "=3.0.0"
+    }
+  }
+}
+```
 
-* ****
