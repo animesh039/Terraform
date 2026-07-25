@@ -442,3 +442,9 @@ resource "azurerm_linux_web_app" "app_services" {
   site_config {}
 }
 ```
+
+### Meta-arguments in Module:
+1. depends_on
+2. provider
+3. count
+4. for_each
