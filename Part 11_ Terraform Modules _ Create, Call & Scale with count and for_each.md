@@ -200,6 +200,19 @@ resource "azurerm_network_security_group" "nsg" {
       destination_address_prefix = "*"
     }
   }
+# We are adding a default custom rule to deny all traffic above the already define rules. 4096 is the last priority number for defining the custom rule.
+  security_rule {
+      name = "DenyAll-Custom"
+      priority = 4096
+      direction = "Inbound"
+      access = "Deny"
+      protocol = "*"
+      source_port_range = "*"
+      destination_port_range = "*"
+      source_address_prefix = "*"
+      destination_address_prefix = "*"
+    }
+  }
   tags = local.tags
     lifecycle {
       ignore_changes = [tags["DeploymentDate"]]
@@ -207,6 +220,11 @@ resource "azurerm_network_security_group" "nsg" {
 }
 ```
 * **output.tf:**
+``` hcl
+output "subnet" {
+  value = azurerm_subnet.subnets
+}
+```
 
 * **variables.tf:**
 ``` hcl
