@@ -300,7 +300,13 @@ module "nsg" {
 ``` hcl
 module "rg" {
   source = "../modules/resource_group"
-  client = ""
+  environment = var.environment
+  client = var.client
+  location = var.location
+  location_short = var.location_short
+  tags = {
+    module = "testing"
+  }
 }
 ```
 
@@ -354,7 +360,7 @@ variable "subnets" {
 ``` hcl
 location = "westeurope"
 location_short = "weu"
-
+client = "azt"
 environment = "tst"
 vnet_address_space = ["172.18.0.0/24"]
 db_subnet = ["172.18.0.0/28"]
@@ -389,5 +395,50 @@ subnets = {
 
 app_services = {
 
+}
+```
+
+* **network.tf:**
+``` hcl
+resource "azurerm_virtual_network" "vnet" {
+  name = "vnet-azt-${var.environment}-${var.location_short}-01"
+  location = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  address_space = var.vnet_address_space
+}
+
+module "subnets" {
+  source = "../modules/subnet"
+
+  environment = var.environment
+  location = var.location
+  location_short = var.location_short
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  resource_group_name = module.rg.resource_group.name
+  subnets = var.subnets
+}
+```
+
+* **compute.tf:**
+``` hcl
+resource "azurerm_service_plan" "asp" {
+  name = "asp-azt-${var.environment}-${var.location_short}-01"
+  resource_group_name = module.rg.resource_group.name
+  location = module.rg.resource_group.location
+  os_type = "Linux"
+  sku_name = "B1"
+}
+
+resource "azurerm_linux_web_app" "app_services" {
+  for_each = var.app_services
+  name = "app-azt-${each.key}-${var.environment}-${var.location_short}-01"
+  resource_group_name = module.rg.resource_group.name
+  location = module.rg.resource_group.location
+  service_plan_id = azurerm_service_plan.asp.id
+  app_settings = { for k, v in each.value.app_settings :
+    upper("${var.environment}_${k}") ==> v
+  }
+
+  site_config {}
 }
 ```
