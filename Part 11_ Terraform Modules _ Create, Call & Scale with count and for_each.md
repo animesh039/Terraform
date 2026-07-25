@@ -169,11 +169,86 @@ variable "tags" {    --> optional
 }
 ```
 
-2. 
+2. **Subnet Module:**
 * **main.tf:**
+``` hcl
+resource "azurerm_subnet" "subnets" {
+  for_each = var.subnets
+  name = "snet-${each.key}-${var.environment}-${var.location_short}-01"
+  resource_group_name = var.resource_group_name
+  virtual_network_name = var.virtual_network_name
+  address_prefixes = each.value.address_prefixes
+}
+resource "azurerm_network_security_group" "nsg" {
+  for_each = var.subnets
+  name = "nsg-${each.key}-${var.environment}-${var.location_short}-01"
+  location = var.location
+  resource_group_name = var.resource_group_name
 
+  dynamic "security_rule" {
+    for_each = each.value.allowed_ports
+    iterator = port
+    content {
+      name = "AllowPort-${port.value}"
+      priority = 200 + index(each.value.allowed_ports, port.value)
+      direction = "Inbound"
+      access = "Allow"
+      protocol = "Tcp"
+      source_port_range = "*"
+      destination_port_range = port.value
+      source_address_prefix = "*"
+      destination_address_prefix = "*"
+    }
+  }
+  tags = local.tags
+    lifecycle {
+      ignore_changes = [tags["DeploymentDate"]]
+     }
+}
+```
 * **output.tf:**
 
 * **variables.tf:**
+``` hcl
+variable "location" {
+  description = "location of the Azure Resources."
+  type = string
+  default = "westeurope"
+
+  validation {
+    condition = contains(["westeurope", "northeurope", "eastus", "westus", "centralus"])
+    error_message = "Valid values are westeurope or eastus."
+  }
+}
+variable "location_short" {
+  description = "Short location of the Azure resources for naming convention."
+  type = string
+  default = weu
+  validation {
+    condition = contains(["weu", "neu", "eus", "wus", "cus"], var.location_short)
+  }
+}
+variable "environment" {
+  description = "Environment name"
+  type = string
+  validation {
+    condition = contains(["tst", "prd", "sbx", "uat", "dev"], var.environment)
+    error_message = "Valid values for environment are tst, prd, sbx, dev or uat."
+  }
+}
+variable "tags" {
+  type = map(any)
+  default = {}
+}
+variable "virtual_network_name" {
+  type = string
+}
+variable "resource_group_name" {
+  type = string
+}
+variable "subnets" {
+  type = map(any)
+}
+```
 
 
