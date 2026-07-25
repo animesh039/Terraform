@@ -54,4 +54,4 @@ terraform console
 ``` bash
 terraform graph
 ```
-* We can copy the diagraph G section and paste in any dot visualizer and then we can see the relationship of the resources.
+* We can copy the diagraph G section and paste in any dot visualizer (Graphviz online --> search this website in Google) and then we can see the relationship of the resources.
