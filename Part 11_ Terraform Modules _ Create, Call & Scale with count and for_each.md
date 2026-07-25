@@ -137,6 +137,9 @@ variable "environment" {
     error_message = "Valid values for environment are tst, prd, sbx, dev or uat."
   }
 }
+variable "client" {
+  type = string
+}
 ```
 
 2. 
