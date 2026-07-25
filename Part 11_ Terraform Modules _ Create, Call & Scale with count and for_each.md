@@ -91,3 +91,42 @@ terraform {
 
 > **NOTE:** On the organization level, we can have standard modules for each resource so that anyone can use it in our project and everyone follows same naming convention, standardization, best practices.
 
+### Project Module:
+1. **Resource Group Module:**
+* **main.tf:**
+
+* **locals.tf:**
+``` hcl
+locals {
+  tags = merge({
+    DeploymentDate = timestamp()
+    Environment = var.environment
+    Sensitivity = var.environment == "prd" ? "High" : var.environment == "tst" ? "Medium"
+  },
+  var.tags)     ---> So, if anyone wants more tags it will be merged to tags as a whole.
+}
+```
+
+* **output.tf:**
+
+* **variables.tf:**
+``` hcl
+variable "location" {
+  description = "location of the Azure Resources."
+  type = string
+  default = "westeurope"
+
+  validation {
+    condition 
+  }
+}
+```
+
+2. 
+* **main.tf:**
+
+* **output.tf:**
+
+* **variables.tf:**
+
+
