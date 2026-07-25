@@ -92,9 +92,20 @@ terraform {
 > **NOTE:** On the organization level, we can have standard modules for each resource so that anyone can use it in our project and everyone follows same naming convention, standardization, best practices.
 
 ### Project Module:
+##### Child Module:
 1. **Resource Group Module:**
 * **main.tf:**
+``` hcl
+resource "azurerm_resource_group" "rg" {
+  name = "rg-${var.client}-${var.environment}-${var.location_short}-01"
+  location = var.location
+  tags = local.tags
 
+  lifecycle {
+    ignore_changes = [tags["deploymentDate"]]
+  }
+}
+```
 * **locals.tf:**
 ``` hcl
 locals {
@@ -108,6 +119,18 @@ locals {
 ```
 
 * **output.tf:**
+``` hcl
+output "resource_group" {  --> All the RG values we can take from this output block later
+  value = azurerm_resource_group.rg
+}
+# If we think that there are some sensitive values which can't be exposed in output, then we can use individually.
+#output "resource_group_name" {
+#  value = azurerm_resource_group.rg.name
+#}
+#output "resource_group_location" {
+#  value = azurerm_resource_group.rg.location
+#}
+```
 
 * **variables.tf:**
 ``` hcl
@@ -139,6 +162,10 @@ variable "environment" {
 }
 variable "client" {
   type = string
+}
+variable "tags" {    --> optional
+  type = map(any)
+  default = {}   --> dafault is kept empty so that it will atleast have those tags mentioned earlier.
 }
 ```
 
