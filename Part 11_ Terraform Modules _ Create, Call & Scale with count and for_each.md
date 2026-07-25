@@ -117,7 +117,24 @@ variable "location" {
   default = "westeurope"
 
   validation {
-    condition 
+    condition = contains(["westeurope", "northeurope", "eastus", "westus", "centralus"])
+    error_message = "Valid values are westeurope or eastus."
+  }
+}
+variable "location_short" {
+  description = "Short location of the Azure resources for naming convention."
+  type = string
+  default = weu
+  validation {
+    condition = contains(["weu", "neu", "eus", "wus", "cus"], var.location_short)
+  }
+}
+variable "environment" {
+  description = "Environment name"
+  type = string
+  validation {
+    condition = contains(["tst", "prd", "sbx", "uat", "dev"], var.environment)
+    error_message = "Valid values for environment are tst, prd, sbx, dev or uat."
   }
 }
 ```
