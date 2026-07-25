@@ -33,3 +33,25 @@ terraform untaint azurerm_resource_group.test-rg
 ``` bash
 terraform taint module.test_backend_nsg.azurerm_network_security_group.nsg
 ```
+
+### Terraform Console:
+* This command is very useful when we are debugging our code.
+* It is interacting with terraform code and state file to give the output.
+``` bash
+terraform console
+> azurerm_resource_group.test-rg
+> upper(azurerm_resource_group.test-rg.name)
+> local.tags
+> module.subnets
+> module.subnets.subnet["be"]
+> module.subnets.subnet["be"].address_prefixes
+```
+
+### Terraform Graph:
+* We can generate a graphical view of our terraform code.
+* This command is generating a dot language output and we can use any dot visualizer to see the visual representation of the code.
+
+``` bash
+terraform graph
+```
+* We can copy the diagraph G section and paste in any dot visualizer and then we can see the relationship of the resources.
