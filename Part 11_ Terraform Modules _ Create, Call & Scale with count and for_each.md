@@ -89,3 +89,5 @@ terraform {
 }
 ```
 
+> **NOTE:** On the organization level, we can have standard modules for each resource so that anyone can use it in our project and everyone follows same naming convention, standardization, best practices.
+
