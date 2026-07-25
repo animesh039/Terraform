@@ -212,7 +212,6 @@ resource "azurerm_network_security_group" "nsg" {
       source_address_prefix = "*"
       destination_address_prefix = "*"
     }
-  }
   tags = local.tags
     lifecycle {
       ignore_changes = [tags["DeploymentDate"]]
@@ -269,4 +268,33 @@ variable "subnets" {
 }
 ```
 
+### Calling a Module:
+##### Main Code/Root Module:
+* We call the child module from the root module.
+* Modeule Sources:
+   * Local: "./modules/resource_group"
+   * Hashicorp: "Azure/vnet/azurerm"    ( also supports version argument in Module Block)
+   * Git Http: "git::https://example.com/vpn.git"
+   * Git Ssh: "git::ssh://username@example.com/storage.git"
+   * GitHub: "github.com/hashicorp/example"
 
+* **main.tf:**
+``` hcl
+module "rg" {
+  source = "./modules/resource_group"
+  component_name = "backend"
+  environment = "test"
+  location = "eastus"
+}
+module "nsg" {
+  source = "./modules/nsg"
+  count = 5
+
+  component_name = "backend"
+  environment = "test"
+  index = count.index
+  location = module.rg.rg_location
+  resource_group_name = module.rg.rg_name
+}
+```
+* 
