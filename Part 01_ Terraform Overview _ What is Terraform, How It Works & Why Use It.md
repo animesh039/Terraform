@@ -32,4 +32,5 @@
 * This terraform state file will have all the record set of our configuration file and our actual resources. Terraform state file is called soul of terraform because state file has the sync between the configuration file and the actual resources deployed.
 * Terraform State File = Terraform Code + Azure Resources Information
 * Every resource has its own resource ID, the configuration of the resource and its properties, all these information terraform state file stores in it. And at the same time it has the terraform configuration file thumbprint. So, basically it is syncing the configuration file with the Azure. When we are applying the terraform code it is deploying the resources and at the same time it will maintain the state file.
-* 
+
+* Assume a scenario where we are deploying the resource group with the help of power shell script. If we execute the same code again, it will give error as we are trying to create the same resource again which will not be allowed in Azure as two resources can't be of same name.
