@@ -63,3 +63,36 @@ terraform {
 
 > **NOTE:** In most of the production use-case we are using ~> sign which is update the patch version and not major or minor version. Updating patch version doesn't introduce any breakthrough changes so it is safe to use it.
 
+
+### Azure Provider Authentication Methods:
+* What provider is doing, it is interacting with the Azure and to interact it has to authenticate with Azure, then only it will be able to deploy the resources in Azure.
+* Even if we are using terraform portal to deploy the resources we have to login and based on the authentication and authorization we can create resources in Azure. Similarly if we are using terraform we have to authenticate with Azure and we have to use proper authentication method. There are multiple methods for terraform to authenticate with the Azure:
+     1. **Authenticating Using the Azure CLI:** This option is used when we are using terraform locally not by CI/CD. To deploy the resources from my laptop using terraform we can use Azure CLI. We are authentication Azure using the Azure CLI and terraform by default is using the Azure CLI mechanism to do the authentication from the terraform to Azure. It is the default mechanism for authentication and we don't have to mention anything. This was happening before 4.0 version of provider that the default subscription that we were choosing using the az cli was used to deploy the resources by default but after the version 4.0 of the provider, we have to mention the subscription ID in the provider block.
+     2. **Authenticating using Service Principal:** We will have the general provider block but with that we have to define the environment variable from the terminal. We can set this environment variable from anywhere else as well like CI/CD automation tools. If the terraform finds these values, then it will automatically use this mechanism to authenticate with the Azure cloud. Then we can use terraform init and plan to authenticate.
+ ``` bash
+export ARM_CLIENT_ID="xxxx"
+export ARM_CLIENT_SECRET="xxxx"
+export ARM_TENANT_ID="xxxx"
+export ARM_SUBSCRIPTION_ID="xxxx"
+```
+     3. **Authenticating using Service Principal:** We can also use the environment variable in the provider block as below. And then we don't have to configure the environment variable and we don't have to use az login. But if we are using this method, then we have to make sure that we are keeping the secrets in a more secure way as it is in a plain text in the code.
+``` hcl
+terraform {
+  required_providers {
+    azurerm = {
+      source = hashicorp/azurerm
+      version ~> 3.70.0
+    }
+  }
+}
+provider "azurerm" {
+  features {}
+  client_id = "xxxx"
+  client_secret = "xxxx"
+  tenant_id = "xxxx"
+  subscription_id = "xxxx"
+}
+```
+    4. **Authenticating to Azure using Managed Service Identity:** We can provide access to the service identity to the Azure.
+    5. **Authenticating to Azure using a Service Principal and a Client Certificate**
+    6. **Authenticating to Azure using OpenID Connect**
