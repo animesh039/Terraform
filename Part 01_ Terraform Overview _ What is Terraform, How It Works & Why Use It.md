@@ -34,7 +34,7 @@
 2. Azure PowerShell: We can use powershell as an scripting language.
 3. Azure CLI: This is Microsoft's own tool to deploy the resources.
 
-###### Then why Terraform? What make terraform different from these?
+### Then why Terraform? What make terraform different from these?
 * We have terraform configuration files in which we write the terraform code. As soon as we apply the changes, first it will write the terraform state file. Terraform state file is the record of changes which we are going to apply with the help of terraform code. At the same time it will deploy the resources in the Azure portal.
 * This terraform state file will have all the record set of our configuration file and our actual resources. Terraform state file is called soul of terraform because state file has the sync between the configuration file and the actual resources deployed.
 * Terraform State File = Terraform Code + Azure Resources Information
@@ -45,7 +45,7 @@
 * In Scripting language the IAC code is not in sync with the actual environment but in terraform it is in sync with the help of terraform state file.
 * Powershell is working in an Imperative way whereas terraform works in a Declarative way.
 
-###### Terraform Syntax:
+### Terraform Syntax:
 * The files in which we are writing the code is called terraform configuration files and the extension should be .tf
 * .tfvars file is used to assign the value to a variable. If the file name is other than terraform.tfvars, then we have to explicitly specify the variable file at the time of running the command.
 * Terraform code is always written in block format.
@@ -71,7 +71,7 @@ resource "azurerm_resource_group" "rg" {
 
 ```
 
-###### Terraform code execution:
+### Terraform code execution:
 * We have to be in the same folder where we have the .tf and .tfvars files.
 * Commands:
 ``` bash
