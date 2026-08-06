@@ -12,9 +12,16 @@
 * Terraform is one of the IAC tool.
 
 ### Benefits of Terraform:
-* It's multi cloud.
+* It supports multi cloud.
 * The IAC code is written in Hashicorp Terraform language, which is human readable and very easy.
 * Before actually executing the code, we can execute the plan to see what exactly that code is going to do. We can prevent accidental changes in our Infra, as we are checking the changes that our code in perform in Cloud Infra.
+* It supports Declarative Syntax, we have to declare what we want and terraform will take care of it.
+* We can plan and review the Changes.
+* We get the facility of state management. State file helps terraform to be in sync with the actual deployment.
+* Modularity and Reusability: If we want to deploy our code multiple times or if we want to put some standardization of the code like we want to use some particular naming convention in our resource. So, we can create a module with all the standard naming conventions and the desired specifications. We don't have to write the same code again and again. We can reuse the code for future deployments.
+* Parallel Execution: Terraform executes the code parallely unlike the sequential in power shell script. If we have a code to deploy 5 resource groups, terraform will not deploy the RG on-by-one, instead it will deploy all the RG together as they don't have any dependency on each other.
+* Versioning and Rollback: We can keep track of different versions of the code by using any versioning tool like Git.
+* Integration with CI/CD: With terraform, we can integrate our deployment with CI/CD Pipelines and terraform work very well with it. It is mostly used now-a-days to do the automated Infra deployment to the Cloud after raising and getting PR approved. 
 
 ### How does Terraform work ?
 * Assume there is a bunch of users writing the terraform code in .tf files.
@@ -53,10 +60,22 @@ resource "azurerm_resource_group" "rg" {
   * azurerm_resource_group -- > Provider Resource
   * rg --> Block Name, which is used to refer the resource in other blocks.
   * name = "resource-group-1"  --> Arguments, this is something we can find in the terraform documentation of Azure.
-  * We can put a hash for single-line comment, ending at the end of the line.
-  * /* Multi-Line Comment -
+  * Comments:
+``` hcl
+# begins a single-line comment, ending at the end of the line.
+
+/* Multi-Line Comment -
     Start and end delimiters for a
     comment that might span
     over multiple lines*/
 
+```
 
+###### Terraform code execution:
+* We have to be in the same folder where we have the .tf and .tfvars files.
+* Commands:
+``` bash
+terraform plan
+terraform apply
+terraform fmt
+```
