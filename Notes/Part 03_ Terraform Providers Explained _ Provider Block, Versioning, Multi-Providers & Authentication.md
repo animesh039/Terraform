@@ -57,5 +57,9 @@ terraform {
 * **=(or no operator)** Allows only one exact version number. Can't be combined with other versions.
 * **!=** Excludes an exact version number.
 * **>,>=,<,<=** Comparisons against a specified version, allowing versions for which the comparison is true. "Greater-than" requests newer versions, and "less-than" requests older versions.
-* **~>** Allows only the rightmost version component to increment. This format is referred to as the pessimistic constraint operator. For example, to allow new patch releases within a specific minor release, use the full version number: ~> 1.0.4 Allows terraform to install 1.0.5 and 1.0.10 but not 1.1.0.  ~>1.1 Allows terraform to install 1.2 and 1.10 but not 2.0.
-* 
+* **~>** Allows only the rightmost version component to increment. This format is referred to as the pessimistic constraint operator. For example, to allow new patch releases within a specific minor release, use the full version number:
+     * ~> 1.0.4 Allows terraform to install 1.0.5 and 1.0.10 but not 1.1.0.
+     * ~>1.1 Allows terraform to install 1.2 and 1.10 but not 2.0.
+
+> **NOTE:** In most of the production use-case we are using ~> sign which is update the patch version and not major or minor version. Updating patch version doesn't introduce any breakthrough changes so it is safe to use it.
+
