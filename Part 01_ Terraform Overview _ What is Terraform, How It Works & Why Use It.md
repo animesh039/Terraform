@@ -37,4 +37,26 @@
 * If we apply the terraform code, it will go to the state file and check if we have the record of that particular resource already existing, it will get the ID of resource and go to Azure portal to check if that particular resource is present. If the resource is available, then it will show no changes. If we want to deploy VM in the RG then we don't have to store it in some variable, simply we have to reference it to the RG already created.
 * In Scripting language the IAC code is not in sync with the actual environment but in terraform it is in sync with the help of terraform state file.
 * Powershell is working in an Imperative way whereas terraform works in a Declarative way.
-* 
+
+###### Terraform Syntax:
+* The files in which we are writing the code is called terraform configuration files and the extension should be .tf
+* .tfvars file is used to assign the value to a variable. If the file name is other than terraform.tfvars, then we have to explicitly specify the variable file at the time of running the command.
+* Terraform code is always written in block format.
+* Syntax:
+``` hcl
+resource "azurerm_resource_group" "rg" {
+  name = "resource-group-1"
+  location = "westeurope"
+}
+```
+  * resource --> Block Types, this can be resource block, data block, output block etc.
+  * azurerm_resource_group -- > Provider Resource
+  * rg --> Block Name, which is used to refer the resource in other blocks.
+  * name = "resource-group-1"  --> Arguments, this is something we can find in the terraform documentation of Azure.
+  * We can put a hash for single-line comment, ending at the end of the line.
+  * /* Multi-Line Comment -
+    Start and end delimiters for a
+    comment that might span
+    over multiple lines*/
+
+
