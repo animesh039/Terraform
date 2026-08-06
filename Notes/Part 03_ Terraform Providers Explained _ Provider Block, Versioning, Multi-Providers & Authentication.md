@@ -99,3 +99,53 @@ provider "azurerm" {
 4. **Authenticating to Azure using Managed Service Identity:** We can provide access to the service identity to the Azure.
 5. **Authenticating to Azure using a Service Principal and a Client Certificate**
 6. **Authenticating to Azure using OpenID Connect**
+
+---
+
+### Multiple Provider Configurations with Alias:
+* Suppose we have a requirement to deploy some resources to Hub using one subscription and some to Spoke using other Subscription. We want to use the same same terraform config file to deploy resources to the Hub and Spoke Subscriptions. How to do that, as in the provider block we can use the subscription ID only once but here we have to use multi-subscription level deployment, then how to do it.
+
+```hcl
+terraform {
+  required_providers {
+    azurerm = {
+      source = hashicorp/azurerm
+      version = "4.14.0"
+    }
+  }
+}
+provider "azurerm" {
+  features {}
+  subscription_id = "aaaa"
+  alias = "hub"
+}
+provider "azurerm" {
+  features {}
+  subscription_id = "bbbb"
+  alias = "spoke1"
+}
+provider "azurerm" {
+  features {}
+  subscription_id = "ccc"
+  alias = "spoke2"
+}
+
+resource "azurerm_resource_group" "hub_rg" {
+  provider = azurerm.hub   --> This will make sure resource is deployed using Hub subscription
+
+  name = "hub-resource-group"
+  location = "westeurope"
+}
+resource "azurerm_resource_group" "hub_rg" {
+  provider = azurerm.spoke1
+
+  name = "spoke1-resource-group"
+  location = "eastus2"
+}
+resource "azurerm_resource_group" "hub_rg" {
+  provider = azurerm.spoke2
+
+  name = "spoke2-resource-group"
+  location = "eastus"
+}
+```
