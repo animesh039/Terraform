@@ -76,7 +76,7 @@ export ARM_TENANT_ID="xxxx"
 export ARM_SUBSCRIPTION_ID="xxxx"
 ```
      3. **Authenticating using Service Principal:** We can also use the environment variable in the provider block as below. And then we don't have to configure the environment variable and we don't have to use az login. But if we are using this method, then we have to make sure that we are keeping the secrets in a more secure way as it is in a plain text in the code.
-``` hcl
+```hcl
 terraform {
   required_providers {
     azurerm = {
@@ -93,6 +93,7 @@ provider "azurerm" {
   subscription_id = "xxxx"
 }
 ```
+
     4. **Authenticating to Azure using Managed Service Identity:** We can provide access to the service identity to the Azure.
     5. **Authenticating to Azure using a Service Principal and a Client Certificate**
     6. **Authenticating to Azure using OpenID Connect**
