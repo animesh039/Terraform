@@ -13,7 +13,7 @@ data "azurerm_key_vault" "amjkv1" {
   resource_group_name = "management-rg"
 }
 ```
-* Mention the arguments by which we can uniquely identify the resource. These arguments of data block are also mentioned in the Terraform Documentation.
+* Mention the arguments by which we can uniquely identify the resource. These arguments of data block are also mentioned in the Terraform Documentation. Search in Google using "terraform azure key vault secret data".
 
 ### Data Source References:
 ```hcl
