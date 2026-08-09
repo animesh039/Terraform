@@ -37,3 +37,6 @@ output "network_rg_id" {
   description = "Network Resource Group ID"
 }
 ```
+
+### LAB:
+1. Create a VM using terraform pipeline and output the IP, username and password. Use these details in ansible script to install Nginx in the VM and deploy a website in the nest stage of the pipeline.
