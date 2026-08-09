@@ -6,6 +6,7 @@
 * We can reference the existing resources using data source which was not deployed through terraform.
 * We are reading the data of the resources which we deployed either manually or Powershell. We don't want to manage those resources but want to consume those resources with the new resources which we are going to create through terraform. With the help of data source we can read those resources, and those resources can be integrated to the new resources which we are going to create using resource block.
 * Example: We don't want to create keyvault secret using terraform as it will be in plain text format. Instead we want to create it manually and consume it to create username and password of a VM.
+* Once Terraform reads the resource using terraform apply, it stores the values of the resource in plain text format in terraform state file. So, we have to secure the state file.
 
 ```hcl
 data "azurerm_key_vault" "amjkv1" {
