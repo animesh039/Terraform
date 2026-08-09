@@ -68,3 +68,15 @@ resouece "azurerm_virtual_network" "vnet-tst" {
     security_group = azurerm_network_security_group.nsg-fe-tst.id
   }
 }
+data "azurerm_key_vault" "hub-key-vault" {
+  name = "mykeyvaultkv-azt-hub-weu-01"
+  resource_group_name = "rg-azt-hub-weu-01"
+}
+data "azurerm_key_vault_secret" "vpn-shared-key" {
+  name = "vpn-shared-key"
+  key_vault_id = data.azurerm_key_vault.hub-key-vault.id
+}
+
+output "vnet-tst" {
+  value = azurerm_virtual_network.vnet-tst.address_space
+}
