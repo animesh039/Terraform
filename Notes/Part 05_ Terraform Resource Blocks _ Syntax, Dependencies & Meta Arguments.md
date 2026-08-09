@@ -57,7 +57,7 @@ resource "azurerm_resource_group" "rg-hub" {
     "DeploymentDate" = "14052025"
   }
 }
-
+```
 
 ---
 
