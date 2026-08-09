@@ -30,6 +30,7 @@ resource "azurerm_network_security_group" "nsg-be-tst" {
   resource_group_name = azurerm_resource_group.rg-tst.name
 }
 resource "azurerm_network_security_group" "nsg-fe-tst" {
+  depends_on = [azurerm_network_security_group.nsgnsg-be-tst, azurerm_network_security_group.nsgnsg-db-tst]
   name = "nsg-fe-tst-weu-01"
   location = azurerm_resource_group.rg-tst.location
   resource_group_name = azurerm_resource_group.rg-tst.name
