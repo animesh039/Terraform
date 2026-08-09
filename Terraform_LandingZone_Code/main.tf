@@ -1,5 +1,5 @@
 
-
+### main.tf
 
 ``` hcl
 resource "azurerm_resource_group" "rg-hub" {
