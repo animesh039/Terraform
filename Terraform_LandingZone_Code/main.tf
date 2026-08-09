@@ -80,3 +80,8 @@ data "azurerm_key_vault_secret" "vpn-shared-key" {
 output "vnet-tst" {
   value = azurerm_virtual_network.vnet-tst.address_space
 }
+output "vpn-shared-key" {
+  description = "VPN Shared Key"
+  value = data.azurerm_key_vault_secret.vpn-shared-key.value
+  sensitive = true
+}
