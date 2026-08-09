@@ -132,7 +132,7 @@ resource "azurerm_resource_group" "rg1" {
         prevent_destroy = true
       }
     }
-      ```
+  ```
    
     * **ignore_changes:** Lets assume, we have a tag in the resource to capture the resource creation timestamp. If we apply the terraform again, it will update the timestamp again with the latest time. We want that this tag of the resource should not be updated. Only once when we are creating the resource, it should be applied and on the next apply this value shouldn't change.
     * ```hcl
@@ -146,7 +146,7 @@ resource "azurerm_resource_group" "rg1" {
         ignore_changes = [ tags["created_on"] ]
       }
     }
-      ```
+  ```
    
     * **replace_triggered_by:** If we are creating 2 resources, RG and NSG and if we want that if any changes are there in RG, it should automatically replace the NSG as well.
     * ```hcl
