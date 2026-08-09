@@ -60,3 +60,13 @@ data "azurerm_network_security_group" "nsg" {
   resource_group_name = "network-rg"
 }
 ```
+
+### Data Source Meta-Arguments:
+1. Lifecycle:
+    * precondition
+    * postcondition
+2. depends_on
+3. provider
+4. count
+5. for_each
+
