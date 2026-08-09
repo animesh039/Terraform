@@ -7,6 +7,7 @@
 * We can use output block to do debugging and validation as well.
 * We can also consume the output generated from output block by some powershell or shell script.
 * Output block doesn't depend on the provider, so we don't have to mention any provider resource type. We just use the block name only.
+* The output will be stored in the output block in terraform state file after terraform apply.
 * **value is the mandatory argument**, which is used to generate the required output.
 
 ```hcl
