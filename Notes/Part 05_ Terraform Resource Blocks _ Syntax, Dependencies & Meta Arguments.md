@@ -61,5 +61,26 @@ resource "azurerm_resource_group" "rg-hub" {
 
 ---
 
+### Resource Block Dependencies:
+##### Parallel Execution:
+* This is one of the benefit of terraform. If we are deploying the resources which are not dependent on each other, then terraform deploys those resources parallely. Example: Deploying 3 resource group.
+
+##### Implicit Dependency:
+* With the implicit dependency we can define the dependency of one resource on the other.
+* Writing the code up and down doesn't decide the dependency of the resources, as by default terraform will execute the code parallely in random fashion and not sequential execution.
+* Example: Creation of NSG and RG. Terraform will try to create the NSG in parallel to RG and it will fail as RG should be present for NSG to be created in it.
+```hcl
+resource "azurerm_resource_group" "rg" {
+  name = "network-rg"
+  location = "westeurope"
+}
+resource "azurerm_network_security_group" "nsg" {
+  name = "network_security_group1"
+  resource_group_name = azurerm_resource_group.rg.name
+  location  = azurerm_resource_group.rg.location
+}
+```
+
+##### Explicit Dependency:
 
 
