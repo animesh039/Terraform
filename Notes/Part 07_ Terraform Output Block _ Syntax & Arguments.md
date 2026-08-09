@@ -38,6 +38,7 @@ output "network_rg_id" {
   description = "Network Resource Group ID"
 }
 ```
-
+* We can run terraform output command to get the outputs.
+* We can use terraform output command and store the value in some powershell script and use it.
 ### LAB:
 1. Create a VM using terraform pipeline and output the IP, username and password. Use these details in ansible script to install Nginx in the VM and deploy a website in the nest stage of the pipeline.
