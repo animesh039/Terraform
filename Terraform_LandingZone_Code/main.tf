@@ -1,3 +1,4 @@
+
 ``` hcl
 resource "azurerm_resource_group" "rg-hub" {
   name = "rg-azt-hub-weu-01"
