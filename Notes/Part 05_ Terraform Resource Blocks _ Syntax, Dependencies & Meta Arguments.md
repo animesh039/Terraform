@@ -200,5 +200,13 @@ resource "azurerm_resource_group" "rg1" {
       }
       ```
 
-2. 
+2. **depends_on:** If 2 resources don't share any property and if want the explicitly define dependency of one resource on the other.
+
+3. **provider:** If we want to deploy multiple resources in multiple subscriptions. We can use alias.
+
+4. **count:**
+
+5. **for_each**
+
+6. **provisioner**
 
