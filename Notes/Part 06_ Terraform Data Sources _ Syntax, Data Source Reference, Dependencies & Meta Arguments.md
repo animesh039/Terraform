@@ -27,3 +27,36 @@ resource "azurerm_network_security_group" "nsg" {
   resource_group_name = data.azurerm_resource_group.network.name
 }
 ```
+
+### Data Source Dependencies:
+* We are just reading the data, so mostly we don't use dependencies in this case.
+###### Implicit Dependency:
+```hcl
+data "azurerm_resource_group" "network" {
+  name = "network-rg"
+}
+data "azurerm_network_security_group" "nsg" {
+  name = "network-security-group-1"
+  resource_group_name = data.azurerm_resource_group.network.name
+}
+```
+
+* It will read the RG first and then will read the NSG.
+
+
+###### Explicit Dependency:
+* Example: We want that once the Subnet-1 is deployed then only terraform should read the NSG block.
+
+```hcl
+resource "azurerm_subnet" "subnet1" {
+  name = "subnet-1"
+  resource_group_name = "network-rg"
+  address_prefixes = ["192.168.0.0/24"]
+  virtual_network_name = "vnet1"
+}
+data "azurerm_network_security_group" "nsg" {
+  depends_on = [azurerm_subnet.subnet1]
+  name = "subnet-1-nsg"
+  resource_group_name = "network-rg"
+}
+```
