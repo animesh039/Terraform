@@ -80,7 +80,28 @@ resource "azurerm_network_security_group" "nsg" {
   location  = azurerm_resource_group.rg.location
 }
 ```
+* We are referring one property of the resource to the another one.
+
 
 ##### Explicit Dependency:
+* What if we don't have the same property in two resources, in this case we can't refer one resource to another because we are not using the same property in the second resource from the first one. But we know that the first resource should be created and then the second one. In this case how we can decide the dependency. For that purpose we are using explicit dependency.
+* Example: we are creating subnet and NSG and we know that they can be created independently, but we want to make sure that the subnet should be created first and the NSG should be created.
+```hcl
+resource "azurerm_subnet" "subnet1" {
+  name = "subnet-1"
+  resource_group_name = "network-rg"
+  address_prefixes = ["192.168.0.0/24"]
+  virtual_network_name = "vnet1"
+}
+resource "azurerm_network_security_group" "nsg" {
+  depends_on = [azurerm_subnet.subnet1]
+  name = "subnet-1-nsg"
+  resource_group_name = "network-rg"
+  location = "westeurope"
+}
+```
+* NSG depends on the Subnet block to be created, by referring to the subnet block.
+* We are explicitly referring the other block, we are instructing terraform explicitly to wait for the creation of subnet and then create NSG.
+
 
 
