@@ -204,7 +204,7 @@ resource "azurerm_resource_group" "rg1" {
 
 3. **provider:** If we want to deploy multiple resources in multiple subscriptions. We can use alias.
 
-4. **count:**
+4. **count**
 
 5. **for_each**
 
