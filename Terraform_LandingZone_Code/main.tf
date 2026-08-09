@@ -1,7 +1,3 @@
-
-### main.tf
-
-``` hcl
 resource "azurerm_resource_group" "rg-hub" {
   name = "rg-azt-hub-weu-01"
   location = "westeurope"
@@ -23,4 +19,3 @@ resource "azurerm_resource_group" "rg-prd" {
     "DeploymentDate" = "14052025"
   }
 }
-```
