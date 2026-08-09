@@ -31,4 +31,8 @@
 
 ### Terraform Destroy:
 * It is opposite to apply command.
-* 
+* It will delete all the resources deployed through config file.
+* Hardly used, only in sandbox environment.
+* It is recommended not to use it in pipeline and use only manually by following 4 eye principle.
+
+
