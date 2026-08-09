@@ -120,10 +120,10 @@ resource "azurerm_resource_group" "rg1" {
 }
 ```
 
-* Arguments of lifecycle meta arguments:
-    * **create_before_destroy:** When we are changing some property of a resource which doesn't support in-place update, then the default behaviour of terraform is to destroy the resource fist and then create the new one. But in some cases we son't want terraform to follow this, we want terraform should create the resource first and then destroy. Use: create_before_destroy = true, in the argument of lifecycle sub-block.
+###### Arguments of lifecycle meta arguments:
+* **create_before_destroy:** When we are changing some property of a resource which doesn't support in-place update, then the default behaviour of terraform is to destroy the resource fist and then create the new one. But in some cases we son't want terraform to follow this, we want terraform should create the resource first and then destroy. Use: create_before_destroy = true, in the argument of lifecycle sub-block.
 
-    * **prevent_destroy:** It helps us to prevent a resource to be accidently deleted. Example: we don't want anyone to delete the database VM, then we can use: prevent_destroy = true, in the argument of lifecycle sub-block. If we want to delete the resource, then first we have to remove the lifecycle meta-argument and then apply.
+* **prevent_destroy:** It helps us to prevent a resource to be accidently deleted. Example: we don't want anyone to delete the database VM, then we can use: prevent_destroy = true, in the argument of lifecycle sub-block. If we want to delete the resource, then first we have to remove the lifecycle meta-argument and then apply.
     * ```hcl
       resource "azurerm_resource_group" "rg1" {
       name = "resource_group2"
@@ -133,8 +133,8 @@ resource "azurerm_resource_group" "rg1" {
       }
     }
   ```
-   
-    * **ignore_changes:** Lets assume, we have a tag in the resource to capture the resource creation timestamp. If we apply the terraform again, it will update the timestamp again with the latest time. We want that this tag of the resource should not be updated. Only once when we are creating the resource, it should be applied and on the next apply this value shouldn't change.
+
+* **ignore_changes:** Lets assume, we have a tag in the resource to capture the resource creation timestamp. If we apply the terraform again, it will update the timestamp again with the latest time. We want that this tag of the resource should not be updated. Only once when we are creating the resource, it should be applied and on the next apply this value shouldn't change.
     * ```hcl
       resource "azurerm_resource_group" "rg1" {
       name = "resource_group1"
@@ -148,7 +148,7 @@ resource "azurerm_resource_group" "rg1" {
     }
   ```
    
-    * **replace_triggered_by:** If we are creating 2 resources, RG and NSG and if we want that if any changes are there in RG, it should automatically replace the NSG as well.
+* **replace_triggered_by:** If we are creating 2 resources, RG and NSG and if we want that if any changes are there in RG, it should automatically replace the NSG as well.
     * ```hcl
       resource "azurerm_resource_group" "rg1" {
         name = "resource_group1"
@@ -164,7 +164,7 @@ resource "azurerm_resource_group" "rg1" {
       }
       ```
    
-    * **precondition:** This is the condition being checked before creating the resource, even before planning also. Example: We want that the NSG is only created when the name of the subnet is "subnet-1".
+* **precondition:** This is the condition being checked before creating the resource, even before planning also. Example: We want that the NSG is only created when the name of the subnet is "subnet-1".
     * ```hcl
       resource "azurerm_subnet" "subnet1" {
         name = "subnet-1"
@@ -185,7 +185,7 @@ resource "azurerm_resource_group" "rg1" {
       }
       ```
    
-    * **postcondition:** This is the condition being checked after the resource is created. Terraform plan will succeed but apply will fail.
+* **postcondition:** This is the condition being checked after the resource is created. Terraform plan will succeed but apply will fail.
     * ```hcl
       resource "azurerm_network_security_group" "nsg" {
         name = "subnet-1-nsg"
