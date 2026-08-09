@@ -103,5 +103,102 @@ resource "azurerm_network_security_group" "nsg" {
 * NSG depends on the Subnet block to be created, by referring to the subnet block.
 * We are explicitly referring the other block, we are instructing terraform explicitly to wait for the creation of subnet and then create NSG.
 
+---
 
+### Resource Block Meta-Arguments:
+* We saw that there are arguments which depends on the provider resource type which is mandatory to provide.
+* Meta-Arguments are special arguments if we want to perform some special task on the resource.
+
+1. **Lifecycle:** It is a special sub-block in the resource block. With lifecycle we have multiple flags or multiple arguments which we can use to perform special task on that particular resource block.
+```hcl
+resource "azurerm_resource_group" "rg1" {
+  name = "resource_group1"
+  location = "westeurope"
+  lifecycle {
+    argument = "value"
+  }
+}
+```
+
+* Arguments of lifecycle meta arguments:
+    * **create_before_destroy:** When we are changing some property of a resource which doesn't support in-place update, then the default behaviour of terraform is to destroy the resource fist and then create the new one. But in some cases we son't want terraform to follow this, we want terraform should create the resource first and then destroy. Use: create_before_destroy = true, in the argument of lifecycle sub-block.
+
+    * **prevent_destroy:** It helps us to prevent a resource to be accidently deleted. Example: we don't want anyone to delete the database VM, then we can use: prevent_destroy = true, in the argument of lifecycle sub-block. If we want to delete the resource, then first we have to remove the lifecycle meta-argument and then apply.
+    * ```hcl
+      resource "azurerm_resource_group" "rg1" {
+      name = "resource_group2"
+      location = "westeurope"
+      lifecycle {
+        prevent_destroy = true
+      }
+    }
+      ```
+   
+    * **ignore_changes:** Lets assume, we have a tag in the resource to capture the resource creation timestamp. If we apply the terraform again, it will update the timestamp again with the latest time. We want that this tag of the resource should not be updated. Only once when we are creating the resource, it should be applied and on the next apply this value shouldn't change.
+    * ```hcl
+      resource "azurerm_resource_group" "rg1" {
+      name = "resource_group1"
+      location = "westeurope"
+      tags = {
+        created_on = timestamp()
+      }
+      lifecycle {
+        ignore_changes = [ tags["created_on"] ]
+      }
+    }
+      ```
+   
+    * **replace_triggered_by:** If we are creating 2 resources, RG and NSG and if we want that if any changes are there in RG, it should automatically replace the NSG as well.
+    * ```hcl
+      resource "azurerm_resource_group" "rg1" {
+        name = "resource_group1"
+        location = "westeurope"
+      }
+      resource "azurerm_network_security_group" "nsg" {
+        name = "subnet-1-nsg"
+        resource_group_name = azurerm_resource_group.rg1.name
+        location = azurerm_resource_group.rg1.location
+        lifecycle {
+          replace_triggered_by = [ azurerm_resource_group.rg1]
+        }
+      }
+      ```
+   
+    * **precondition:** This is the condition being checked before creating the resource, even before planning also. Example: We want that the NSG is only created when the name of the subnet is "subnet-1".
+    * ```hcl
+      resource "azurerm_subnet" "subnet1" {
+        name = "subnet-1"
+        resource_group_name = "network-rg"
+        address_prefixes = ["192.168.0.0/24"]
+        virtual_network_name = "vnet1"
+      }
+      resource "azurerm_network_security_group" "nsg" {
+        name = "subnet-1-nsg"
+        resource_group_name = "network-rg"
+        location = "westeurope"
+        lifecycle {
+          precondition {
+            condition = azurerm_subnet.subnet1.name == "subnet-1"
+            error_message = "Subnet name should be subnet-1 only."
+          }
+        }
+      }
+      ```
+   
+    * **postcondition:** This is the condition being checked after the resource is created. Terraform plan will succeed but apply will fail.
+    * ```hcl
+      resource "azurerm_network_security_group" "nsg" {
+        name = "subnet-1-nsg"
+        resource_group_name = "network-rg"
+        location = "westeurope"
+        lifecycle {
+          postcondition {
+            condition = length(self.security_rule) > 0
+            error_message = "The NSG must contain atleast one rule."
+          }
+        }
+      }
+      ```
+
+2. 
 
