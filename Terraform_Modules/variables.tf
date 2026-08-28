@@ -1,0 +1,10 @@
+variable "resource_group_name" {}
+variable "location" {}
+variable "subnet_name" {}
+variable "virtual_network_name" {}
+variable "network_interface_name" {}
+variable "public_ip_name" {}
+variable "private_ip_name" {}
+variable "virtual_machine_name" {}
+variable "virtual_machine_size" {}
+variable "network_security_group_name" {}
